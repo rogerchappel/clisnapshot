@@ -1,0 +1,23 @@
+{
+  "snapshotDir": "__snapshots__",
+  "fixturesDir": "fixtures",
+  "defaultTimeoutMs": 5000,
+  "scrubbers": [],
+  "cases": {
+    "help-output": {
+      "command": "node",
+      "args": ["fixtures/bin/example-cli.mjs", "--help"],
+      "snapshot": "help-output.snap"
+    },
+    "noisy-output": {
+      "command": "node",
+      "args": ["fixtures/bin/example-cli.mjs", "noisy"],
+      "snapshot": "noisy-output.snap"
+    },
+    "failure-output": {
+      "command": "node",
+      "args": ["fixtures/bin/example-cli.mjs", "fail"],
+      "snapshot": "failure-output.snap"
+    }
+  }
+}
