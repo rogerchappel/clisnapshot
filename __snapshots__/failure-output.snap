@@ -1,0 +1,9 @@
+# clisnapshot v1
+case: failure-output
+command: node fixtures/bin/example-cli.mjs fail
+exitCode: 7
+signal: null
+--- stdout ---
+
+--- stderr ---
+fixture failed clearly

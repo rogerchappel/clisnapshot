@@ -1,0 +1,9 @@
+# clisnapshot v1
+case: noisy-output
+command: node fixtures/bin/example-cli.mjs noisy
+exitCode: 0
+signal: null
+--- stdout ---
+run id <UUID> at <DATE> in <HOME>/Developer/my-opensource/clisnapshot took <DURATION>
+--- stderr ---
+

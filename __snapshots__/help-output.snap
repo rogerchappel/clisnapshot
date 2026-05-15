@@ -1,0 +1,10 @@
+# clisnapshot v1
+case: help-output
+command: node fixtures/bin/example-cli.mjs --help
+exitCode: 0
+signal: null
+--- stdout ---
+example-cli <command>
+Commands: greet, noisy, fail
+--- stderr ---
+
