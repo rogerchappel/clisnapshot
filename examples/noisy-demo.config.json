@@ -1,0 +1,15 @@
+{
+  "snapshotDir": "__snapshots__",
+  "cases": {
+    "noisy-report": {
+      "command": "node",
+      "args": ["noisy-cli.mjs", "report"],
+      "snapshot": "noisy-report.snap"
+    },
+    "noisy-help": {
+      "command": "node",
+      "args": ["noisy-cli.mjs", "--help"],
+      "snapshot": "noisy-help.snap"
+    }
+  }
+}

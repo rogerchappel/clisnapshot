@@ -103,6 +103,8 @@ node dist/cli.js run --case help-output
 
 See [`examples/clisnapshot.config.json`](examples/clisnapshot.config.json) and [`fixtures/bin/example-cli.mjs`](fixtures/bin/example-cli.mjs).
 
+For a focused noisy-output walkthrough, see [`docs/tutorials/stabilize-noisy-cli-output.md`](docs/tutorials/stabilize-noisy-cli-output.md) and the runnable config in [`examples/noisy-demo.config.json`](examples/noisy-demo.config.json).
+
 ## Contributing and security
 
 Small, atomic PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

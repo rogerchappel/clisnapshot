@@ -1,0 +1,10 @@
+# clisnapshot v1
+case: noisy-help
+command: node noisy-cli.mjs --help
+exitCode: 0
+signal: null
+--- stdout ---
+Usage: noisy-cli report
+Prints a tiny report with intentionally noisy fields.
+--- stderr ---
+
