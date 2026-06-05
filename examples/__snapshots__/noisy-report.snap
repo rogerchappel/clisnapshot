@@ -1,0 +1,13 @@
+# clisnapshot v1
+case: noisy-report
+command: node noisy-cli.mjs report
+exitCode: 0
+signal: null
+--- stdout ---
+Noisy CLI report
+run_id=<UUID>
+generated_at=<DATE>
+duration=<DURATION>
+home_path=<HOME>/demo-workspace
+--- stderr ---
+
