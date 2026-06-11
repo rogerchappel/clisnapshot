@@ -109,6 +109,19 @@ For a focused noisy-output walkthrough, see [`docs/tutorials/stabilize-noisy-cli
 
 Small, atomic PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
+## Development
+
+Use Node.js 20 or newer. Run the same checks locally before opening a PR:
+
+```sh
+npm run build
+npm run check
+npm test
+npm run smoke
+npm run package:smoke
+npm run release:check
+```
+
 ## License
 
 MIT
