@@ -105,6 +105,16 @@ See [`examples/clisnapshot.config.json`](examples/clisnapshot.config.json) and [
 
 For a focused noisy-output walkthrough, see [`docs/tutorials/stabilize-noisy-cli-output.md`](docs/tutorials/stabilize-noisy-cli-output.md) and the runnable config in [`examples/noisy-demo.config.json`](examples/noisy-demo.config.json).
 
+For a temp-directory review pack that generates and verifies noisy-output
+snapshots without changing checked-in examples, run:
+
+```sh
+bash demo/run-noisy-review-pack.sh
+```
+
+See [`docs/tutorials/noisy-review-pack.md`](docs/tutorials/noisy-review-pack.md)
+and [`docs/promo/noisy-review-launch-note.md`](docs/promo/noisy-review-launch-note.md).
+
 ## Contributing and security
 
 Small, atomic PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
