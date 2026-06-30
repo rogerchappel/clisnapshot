@@ -105,6 +105,16 @@ See [`examples/clisnapshot.config.json`](examples/clisnapshot.config.json) and [
 
 For a focused noisy-output walkthrough, see [`docs/tutorials/stabilize-noisy-cli-output.md`](docs/tutorials/stabilize-noisy-cli-output.md) and the runnable config in [`examples/noisy-demo.config.json`](examples/noisy-demo.config.json).
 
+For a reproducible demo that copies the noisy fixture to a temporary workspace,
+updates snapshots, reruns comparison, and verifies scrubbed output, run:
+
+```sh
+bash demo/run-noisy-cli-demo.sh
+```
+
+Promotion support drafts live in [`docs/promo/video-brief-noisy-cli.md`](docs/promo/video-brief-noisy-cli.md)
+and [`docs/promo/social-hooks.md`](docs/promo/social-hooks.md).
+
 ## Contributing and security
 
 Small, atomic PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

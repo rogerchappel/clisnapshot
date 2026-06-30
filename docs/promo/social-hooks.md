@@ -1,25 +1,27 @@
-# Social Hook Pack
+# clisnapshot Social Hooks
 
-Use these as draft prompts for human-edited posts. They are grounded in the README, examples, and `docs/tutorials/stabilize-noisy-cli-output.md`.
+Grounded post drafts for the noisy CLI fixture.
 
 ## Short Posts
 
-- CLI snapshot tests are easy until timestamps, UUIDs, durations, and home paths make every run look different. `clisnapshot` includes built-in scrubbers for those common drifts.
-- The new noisy-output demo shows the full loop: run a fixture CLI, update snapshots intentionally, then run the read-only check.
-- `clisnapshot` writes plain text snapshots that can be reviewed in git. No hosted service, telemetry, or account requirement.
+1. `clisnapshot` snapshots CLI output after normalizing noisy fields like UUIDs, timestamps, durations, temp paths, home paths, and ANSI color.
+2. The noisy CLI demo runs a fixture command, writes snapshots, reruns them, and shows the same scrubber logic on stdin.
+3. Snapshot updates are explicit: `clisnapshot run --update` writes fixtures, while `clisnapshot run` compares them.
+4. Everything stays local: config, fixture commands, and `.snap` files are plain repo files.
 
-## Demo CTA
+## Demo Angle
 
-Try the local demo:
+Run:
 
 ```sh
-npm run build
-node dist/cli.js run --config examples/noisy-demo.config.json --update
-node dist/cli.js run --config examples/noisy-demo.config.json
+npm install
+bash demo/run-noisy-cli-demo.sh
 ```
+
+Show `.tmp/demo-noisy-cli/__snapshots__/noisy-report.snap` and point out the normalized UUID, timestamp, duration, and home path.
 
 ## Guardrails
 
-- Say "scrubbers are a guardrail" instead of "secret scanning."
-- Do not claim adoption, benchmark, or hosted workflow numbers.
-- Keep the focus on deterministic local CLI output review.
+- Do not claim scrubbers make secrets safe to snapshot.
+- Keep the story on deterministic terminal-output fixtures.
+- Mention that fixture commands are executed by the local developer or CI job.
