@@ -115,6 +115,16 @@ bash demo/run-noisy-cli-demo.sh
 Promotion support drafts live in [`docs/promo/video-brief-noisy-cli.md`](docs/promo/video-brief-noisy-cli.md)
 and [`docs/promo/social-hooks.md`](docs/promo/social-hooks.md).
 
+For a temp-directory review pack that generates and verifies noisy-output
+snapshots without changing checked-in examples, run:
+
+```sh
+bash demo/run-noisy-review-pack.sh
+```
+
+See [`docs/tutorials/noisy-review-pack.md`](docs/tutorials/noisy-review-pack.md)
+and [`docs/promo/noisy-review-launch-note.md`](docs/promo/noisy-review-launch-note.md).
+
 ## Contributing and security
 
 Small, atomic PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
