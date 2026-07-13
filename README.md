@@ -125,6 +125,14 @@ bash demo/run-noisy-review-pack.sh
 See [`docs/tutorials/noisy-review-pack.md`](docs/tutorials/noisy-review-pack.md)
 and [`docs/promo/noisy-review-launch-note.md`](docs/promo/noisy-review-launch-note.md).
 
+To preview scrubber behavior from stdin before creating a snapshot case, run:
+
+```sh
+bash demo/run-stdin-scrub-demo.sh
+```
+
+See [`docs/tutorials/scrub-stdin-output.md`](docs/tutorials/scrub-stdin-output.md).
+
 ## Contributing and security
 
 Small, atomic PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
