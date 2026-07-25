@@ -8,6 +8,11 @@ Stable snapshots for terminal output without the confetti drift 📸
 
 CLI output drifts for boring reasons: ANSI color, UUIDs, dates, temp paths, home directories, durations, and platform-specific paths. `clisnapshot` keeps the useful signal while sanding down the confetti.
 
+Cases that exceed their timeout are rejected with `CASE_TIMEOUT` only after their
+spawned process tree has been terminated. On POSIX systems, clisnapshot gives the
+dedicated process group a short `SIGTERM` grace period before escalating to
+`SIGKILL`; on Windows it uses `taskkill /T` and then `/F` to clean up descendants.
+
 ## Install
 
 ```sh
