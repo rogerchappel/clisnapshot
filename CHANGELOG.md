@@ -12,6 +12,8 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) an
 - `init`, `run`, `list`, `inspect`, and `scrub` commands.
 - Built-in scrubbers for ANSI, paths, dates, UUIDs, and durations.
 - Fixture-backed tests and smoke validation.
+- Verified npm tarball installation and provenance-backed publishing from the
+  tag release workflow.
 
 ## Release Links
 
