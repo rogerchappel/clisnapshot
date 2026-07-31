@@ -5,15 +5,21 @@ project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 smoke_root="$(mktemp -d "${TMPDIR:-/tmp}/clisnapshot-package-smoke.XXXXXX")"
 trap 'rm -rf "$smoke_root"' EXIT
 
-package_dir="$smoke_root/package"
 install_dir="$smoke_root/install"
-mkdir -p "$package_dir" "$install_dir"
+mkdir -p "$install_dir"
 
-cd "$project_root"
-npm pack --pack-destination "$package_dir" >/dev/null
-package_tarball="$(find "$package_dir" -maxdepth 1 -type f -name '*.tgz' -print -quit)"
-
+package_tarball="${1:-}"
 if [[ -z "$package_tarball" ]]; then
+  package_dir="$smoke_root/package"
+  mkdir -p "$package_dir"
+  cd "$project_root"
+  npm pack --pack-destination "$package_dir" >/dev/null
+  package_tarball="$(find "$package_dir" -maxdepth 1 -type f -name '*.tgz' -print -quit)"
+else
+  package_tarball="$(cd "$(dirname "$package_tarball")" && pwd)/$(basename "$package_tarball")"
+fi
+
+if [[ -z "$package_tarball" || ! -f "$package_tarball" ]]; then
   echo "package smoke: npm pack did not create a tarball" >&2
   exit 1
 fi

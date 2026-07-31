@@ -7,6 +7,9 @@ on:
       - releasebox.config.json
       - package.json
       - package-lock.json
+      - README.md
+      - scripts/package-smoke.sh
+      - tests/release-contract.test.mjs
       - .github/workflows/release*.yml
 
 permissions:
@@ -39,6 +42,8 @@ jobs:
         run: node /tmp/releasebox/bin/releasebox.js check .
       - name: Run release checks
         run: npm run release:check
+      - name: Verify packed artifact installation
+        run: npm run package:smoke
       - name: Release notes preview
         run: |
           node /tmp/releasebox/bin/releasebox.js notes . > release-notes-preview.md
