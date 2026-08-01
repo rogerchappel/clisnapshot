@@ -37,11 +37,22 @@ jobs:
         run: node /tmp/releasebox/bin/releasebox.js check .
       - name: Run release checks
         run: npm run release:check
-      - name: Build package
-        run: npm pack
+      - name: Pack release artifact
+        id: package
+        run: |
+          PACKAGE_TARBALL="$(npm pack --pack-destination "$RUNNER_TEMP")"
+          echo "tarball=$RUNNER_TEMP/$PACKAGE_TARBALL" >> "$GITHUB_OUTPUT"
+      - name: Verify release artifact installation
+        run: npm run package:smoke -- "${{ steps.package.outputs.tarball }}"
+      - name: Publish package to npm
+        env:
+          PACKAGE_TARBALL: ${{ steps.package.outputs.tarball }}
+        run: npm publish "${PACKAGE_TARBALL}" --provenance --access public
       - name: Generate release notes
         run: node /tmp/releasebox/bin/releasebox.js notes . > RELEASE_NOTES.md
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md *.tgz
+        env:
+          PACKAGE_TARBALL: ${{ steps.package.outputs.tarball }}
+        run: gh release create "${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md "${PACKAGE_TARBALL}"

@@ -155,6 +155,20 @@ npm run package:smoke
 npm run release:check
 ```
 
+## Release and installation contract
+
+The supported end-user distribution is the public `clisnapshot` package on
+npm. A `vMAJOR.MINOR.PATCH` tag runs the release workflow, which builds one
+tarball, installs that exact tarball into a disposable project, runs its
+`clisnapshot --help` executable, and then publishes the verified artifact to
+npm with trusted-publishing provenance. The same disposable-install smoke test
+runs in CI and in the release dry run.
+
+Maintainers must configure the npm package's trusted publisher for this GitHub
+repository and `.github/workflows/release.yml`; the workflow intentionally has
+no long-lived npm token fallback. A tag must match the version in `package.json`
+and must not be pushed until the npm trusted-publisher configuration exists.
+
 ## License
 
 MIT
