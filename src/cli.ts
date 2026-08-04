@@ -32,11 +32,53 @@ Options:
 `;
 }
 
-function parseFlag(args: string[], names: string[]): string | undefined {
+type ParsedOptions = { update?: boolean; caseName?: string; configPath?: string; positionals: string[] };
+
+const commandUsage: Record<string, string> = {
+  init: "clisnapshot init [dir]",
+  run: "clisnapshot run [--update] [--case <name>] [--config <path>]",
+  list: "clisnapshot list [--config <path>]",
+  inspect: "clisnapshot inspect [--config <path>]",
+  scrub: "clisnapshot scrub [text]"
+};
+
+function usageError(command: string, message: string): never {
+  throw new CliSnapshotError(`${message}\nUsage: ${commandUsage[command]}`, "INVALID_ARGUMENTS");
+}
+
+function parseCommand(command: string, args: string[]): ParsedOptions {
+  const parsed: ParsedOptions = { positionals: [] };
+  const valueFlags = command === "run"
+    ? new Map([["--case", "caseName"], ["-c", "caseName"], ["--config", "configPath"]] as const)
+    : command === "list" || command === "inspect"
+      ? new Map([["--config", "configPath"]] as const)
+      : new Map<string, "caseName" | "configPath">();
+
   for (let i = 0; i < args.length; i += 1) {
-    if (names.includes(args[i])) return args[i + 1];
+    const arg = args[i];
+    const key = valueFlags.get(arg);
+    if (key) {
+      const value = args[i + 1];
+      if (!value || value.startsWith("-")) usageError(command, `Option '${arg}' requires a value.`);
+      if (parsed[key] !== undefined) usageError(command, `Option '${arg}' may only be specified once.`);
+      parsed[key] = value;
+      i += 1;
+      continue;
+    }
+    if (command === "run" && (arg === "--update" || arg === "-u")) {
+      if (parsed.update) usageError(command, `Option '${arg}' may only be specified once.`);
+      parsed.update = true;
+      continue;
+    }
+    if (arg.startsWith("-")) usageError(command, `Unknown option '${arg}'.`);
+    parsed.positionals.push(arg);
   }
-  return undefined;
+
+  const maxPositionals = command === "init" ? 1 : command === "scrub" ? Infinity : 0;
+  if (parsed.positionals.length > maxPositionals) {
+    usageError(command, `Unexpected argument '${parsed.positionals[maxPositionals]}'.`);
+  }
+  return parsed;
 }
 
 async function main(argv = process.argv.slice(2)): Promise<number> {
@@ -50,15 +92,17 @@ async function main(argv = process.argv.slice(2)): Promise<number> {
     return 0;
   }
   if (command === "init") {
-    const written = await initProject(argv[1] ?? ".");
+    const options = parseCommand(command, argv.slice(1));
+    const written = await initProject(options.positionals[0] ?? ".");
     console.log(written.length ? `Created ${written.length} file(s):\n${written.join("\n")}` : "Nothing to create; clisnapshot files already exist.");
     return 0;
   }
   if (command === "run") {
+    const options = parseCommand(command, argv.slice(1));
     const summary = await runSnapshots({
-      update: argv.includes("--update") || argv.includes("-u"),
-      caseName: parseFlag(argv, ["--case", "-c"]),
-      configPath: parseFlag(argv, ["--config"])
+      update: options.update,
+      caseName: options.caseName,
+      configPath: options.configPath
     });
     for (const result of summary.results) {
       console.log(`${symbol(result.status)} ${result.name} (${result.status})`);
@@ -68,16 +112,19 @@ async function main(argv = process.argv.slice(2)): Promise<number> {
     return summary.failed ? 1 : 0;
   }
   if (command === "list") {
-    const cases = await listCases(parseFlag(argv, ["--config"]));
+    const options = parseCommand(command, argv.slice(1));
+    const cases = await listCases(options.configPath);
     console.log(cases.join("\n"));
     return 0;
   }
   if (command === "inspect") {
-    console.log(JSON.stringify(await inspectConfig(parseFlag(argv, ["--config"])), null, 2));
+    const options = parseCommand(command, argv.slice(1));
+    console.log(JSON.stringify(await inspectConfig(options.configPath), null, 2));
     return 0;
   }
   if (command === "scrub") {
-    const text = argv.slice(1).join(" ") || await readStdin();
+    const options = parseCommand(command, argv.slice(1));
+    const text = options.positionals.join(" ") || await readStdin();
     process.stdout.write(scrubText(text));
     return 0;
   }
