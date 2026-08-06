@@ -50,6 +50,12 @@ A minimal `clisnapshot.config.json`:
 }
 ```
 
+`defaultTimeoutMs` and each case's `timeoutMs` must be finite positive numbers.
+Case `args` must contain only strings, `env` values must be strings, and custom
+scrubber `pattern`, `replacement`, and optional `flags` fields must be strings.
+Every case must resolve to a unique snapshot path; this includes filenames
+derived automatically from case names.
+
 ## Commands
 
 - `clisnapshot init [dir]` — create a starter config, fixture CLI, and snapshot directory.
