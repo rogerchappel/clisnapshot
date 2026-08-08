@@ -93,5 +93,20 @@ function validateScrubbers(value: unknown, label: string): void {
     if (typeof scrubber.pattern !== "string") invalid(`${label}[${index}] pattern must be a string`);
     if (typeof scrubber.replacement !== "string") invalid(`${label}[${index}] replacement must be a string`);
     if (scrubber.flags !== undefined && typeof scrubber.flags !== "string") invalid(`${label}[${index}] flags must be a string`);
+    const flags = scrubber.flags ?? "g";
+    try {
+      new RegExp("", flags);
+    } catch (error) {
+      invalid(`${label}[${index}] has invalid flags '${flags}': ${errorMessage(error)}`);
+    }
+    try {
+      new RegExp(scrubber.pattern, flags);
+    } catch (error) {
+      invalid(`${label}[${index}] has an invalid regular expression: ${errorMessage(error)}`);
+    }
   }
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
