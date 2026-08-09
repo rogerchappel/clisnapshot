@@ -35,6 +35,36 @@ test("validation rejects malformed global and case scrubbers", () => {
   assertConfigInvalid({ cases: { example: { command: "node", scrubbers: [{ pattern: "x", replacement: "y", flags: 1 }] } } }, /flags must be a string/);
 });
 
+test("validation rejects an invalid global scrubber pattern", () => {
+  assertConfigInvalid(
+    { scrubbers: [{ pattern: "[", replacement: "x" }], cases: {} },
+    /Config scrubbers\[0\].*invalid regular expression/i
+  );
+});
+
+test("validation rejects an invalid case scrubber pattern", () => {
+  assertConfigInvalid(
+    { cases: { example: { command: "node", scrubbers: [{ pattern: "(?", replacement: "x" }] } } },
+    /Case 'example' scrubbers\[0\].*invalid regular expression/i
+  );
+});
+
+test("validation rejects invalid and duplicate scrubber flags", () => {
+  for (const flags of ["z", "gg"]) {
+    assertConfigInvalid(
+      { scrubbers: [{ pattern: "x", replacement: "y", flags }], cases: {} },
+      /Config scrubbers\[0\].*invalid flags/i
+    );
+  }
+});
+
+test("validation accepts a valid custom scrubber", () => {
+  assert.doesNotThrow(() => validateConfig({
+    scrubbers: [{ pattern: "token-[0-9]+", replacement: "token-<ID>", flags: "gi" }],
+    cases: { example: { command: "node" } }
+  }));
+});
+
 test("validation rejects duplicate explicit snapshot destinations", () => {
   assertConfigInvalid({ cases: {
     first: { command: "node", snapshot: "nested/../same.snap" },

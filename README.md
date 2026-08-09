@@ -53,6 +53,8 @@ A minimal `clisnapshot.config.json`:
 `defaultTimeoutMs` and each case's `timeoutMs` must be finite positive numbers.
 Case `args` must contain only strings, `env` values must be strings, and custom
 scrubber `pattern`, `replacement`, and optional `flags` fields must be strings.
+Scrubber patterns must be valid JavaScript regular expressions, and flags must
+be valid and non-duplicated; invalid scrubbers are rejected before any case runs.
 Every case must resolve to a unique snapshot path; this includes filenames
 derived automatically from case names.
 
