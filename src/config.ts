@@ -45,6 +45,9 @@ export function validateConfig(config: CliSnapshotConfig): void {
   if (!config.cases || typeof config.cases !== "object" || Array.isArray(config.cases)) {
     throw new CliSnapshotError("Config must include a cases object", "CONFIG_INVALID");
   }
+  if (Object.keys(config.cases).length === 0) {
+    throw new CliSnapshotError("Config cases must include at least one case", "CONFIG_INVALID");
+  }
   if (config.defaultTimeoutMs !== undefined) validateTimeout(config.defaultTimeoutMs, "defaultTimeoutMs");
   if (config.snapshotDir !== undefined && typeof config.snapshotDir !== "string") invalid("snapshotDir must be a string");
   if (config.fixturesDir !== undefined && typeof config.fixturesDir !== "string") invalid("fixturesDir must be a string");

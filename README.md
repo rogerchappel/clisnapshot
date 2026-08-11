@@ -51,6 +51,7 @@ A minimal `clisnapshot.config.json`:
 ```
 
 `defaultTimeoutMs` and each case's `timeoutMs` must be finite positive numbers.
+The `cases` object must contain at least one case.
 Case `args` must contain only strings, `env` values must be strings, and custom
 scrubber `pattern`, `replacement`, and optional `flags` fields must be strings.
 Scrubber patterns must be valid JavaScript regular expressions, and flags must
@@ -85,7 +86,9 @@ Add project-specific scrubbers:
   "scrubbers": [
     { "pattern": "api_[A-Za-z0-9]+", "replacement": "api_<TOKEN>" }
   ],
-  "cases": {}
+  "cases": {
+    "version": { "command": "node", "args": ["cli.js", "--version"] }
+  }
 }
 ```
 

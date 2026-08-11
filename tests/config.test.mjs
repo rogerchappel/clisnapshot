@@ -10,6 +10,10 @@ test("validation fails without cases", () => {
   assert.throws(() => validateConfig({}), /cases object/);
 });
 
+test("validation rejects an empty cases object", () => {
+  assertConfigInvalid({ cases: {} }, /cases must include at least one case/);
+});
+
 function assertConfigInvalid(config, message) {
   assert.throws(
     () => validateConfig(config),
@@ -19,7 +23,7 @@ function assertConfigInvalid(config, message) {
 
 test("validation rejects invalid timeout values", () => {
   for (const value of ["5000", 0, -1, Infinity, NaN]) {
-    assertConfigInvalid({ defaultTimeoutMs: value, cases: {} }, /defaultTimeoutMs must be a finite positive number/);
+    assertConfigInvalid({ defaultTimeoutMs: value, cases: { example: { command: "node" } } }, /defaultTimeoutMs must be a finite positive number/);
     assertConfigInvalid({ cases: { example: { command: "node", timeoutMs: value } } }, /timeoutMs must be a finite positive number/);
   }
 });
@@ -30,14 +34,14 @@ test("validation rejects non-string args and env values", () => {
 });
 
 test("validation rejects malformed global and case scrubbers", () => {
-  assertConfigInvalid({ scrubbers: [{ pattern: 42, replacement: "x" }], cases: {} }, /pattern must be a string/);
+  assertConfigInvalid({ scrubbers: [{ pattern: 42, replacement: "x" }], cases: { example: { command: "node" } } }, /pattern must be a string/);
   assertConfigInvalid({ cases: { example: { command: "node", scrubbers: [{ pattern: "x", replacement: false }] } } }, /replacement must be a string/);
   assertConfigInvalid({ cases: { example: { command: "node", scrubbers: [{ pattern: "x", replacement: "y", flags: 1 }] } } }, /flags must be a string/);
 });
 
 test("validation rejects an invalid global scrubber pattern", () => {
   assertConfigInvalid(
-    { scrubbers: [{ pattern: "[", replacement: "x" }], cases: {} },
+    { scrubbers: [{ pattern: "[", replacement: "x" }], cases: { example: { command: "node" } } },
     /Config scrubbers\[0\].*invalid regular expression/i
   );
 });
@@ -52,7 +56,7 @@ test("validation rejects an invalid case scrubber pattern", () => {
 test("validation rejects invalid and duplicate scrubber flags", () => {
   for (const flags of ["z", "gg"]) {
     assertConfigInvalid(
-      { scrubbers: [{ pattern: "x", replacement: "y", flags }], cases: {} },
+      { scrubbers: [{ pattern: "x", replacement: "y", flags }], cases: { example: { command: "node" } } },
       /Config scrubbers\[0\].*invalid flags/i
     );
   }

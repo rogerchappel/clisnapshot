@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 
 const cli = ["dist/cli.js"];
 
@@ -53,6 +56,19 @@ test("CLI accepts documented short run flags", () => {
   const result = spawnSync("node", [...cli, "run", "-u", "-c", "help-output"], { encoding: "utf8" });
   assert.equal(result.status, 0);
   assert.match(result.stdout, /help-output \(updated\)/);
+});
+
+test("CLI rejects a run configuration with no cases", t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "clisnapshot-empty-cases-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const configPath = path.join(dir, "clisnapshot.config.json");
+  fs.writeFileSync(configPath, JSON.stringify({ cases: {} }));
+
+  const result = spawnSync("node", [...cli, "run", "--config", configPath], { encoding: "utf8" });
+
+  assert.equal(result.status, 2);
+  assert.match(result.stderr, /cases must include at least one case/);
+  assert.doesNotMatch(result.stdout, /Summary: 0 passed/);
 });
 
 test("CLI scrub retains argument and stdin forms", () => {
