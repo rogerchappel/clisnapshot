@@ -37,6 +37,8 @@ jobs:
         run: node /tmp/releasebox/bin/releasebox.js check .
       - name: Run release checks
         run: npm run release:check
+      - name: Verify release tag matches package version
+        run: node scripts/verify-release-tag.mjs
       - name: Pack release artifact
         id: package
         run: |

@@ -177,8 +177,11 @@ runs in CI and in the release dry run.
 
 Maintainers must configure the npm package's trusted publisher for this GitHub
 repository and `.github/workflows/release.yml`; the workflow intentionally has
-no long-lived npm token fallback. A tag must match the version in `package.json`
-and must not be pushed until the npm trusted-publisher configuration exists.
+no long-lived npm token fallback. Before packing or publishing, the workflow
+requires `GITHUB_REF_NAME` to equal `v` followed by the exact version in
+`package.json` (for example, package version `0.1.0` requires tag `v0.1.0`). A
+release tag must not be pushed until the npm trusted-publisher configuration
+exists.
 
 ## License
 

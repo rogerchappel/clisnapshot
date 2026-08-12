@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { parseDocument } from "yaml";
 
@@ -47,6 +48,38 @@ test("documented npm installation is backed by the release workflow", async () =
     /npm publish "\$\{PACKAGE_TARBALL\}" --provenance --access public/,
     "the tag workflow must publish the same packed tarball with npm provenance"
   );
+});
+
+test("release workflow verifies the tag before packing or publishing", async () => {
+  const { workflow } = await readReleaseWorkflow();
+  const steps = workflow.jobs.release.steps;
+  const guardIndex = steps.findIndex(
+    (step) => step.name === "Verify release tag matches package version"
+  );
+  const packIndex = steps.findIndex((step) => step.name === "Pack release artifact");
+  const publishIndex = steps.findIndex((step) => step.name === "Publish package to npm");
+
+  assert.notEqual(guardIndex, -1, "release workflow must verify its tag");
+  assert.equal(steps[guardIndex].run, "node scripts/verify-release-tag.mjs");
+  assert.ok(guardIndex < packIndex, "tag guard must run before npm pack");
+  assert.ok(guardIndex < publishIndex, "tag guard must run before npm publish");
+});
+
+test("release tag guard accepts only v plus the package version", async () => {
+  const packageJson = JSON.parse(await fs.readFile("package.json", "utf8"));
+  const runGuard = (tag) =>
+    spawnSync(process.execPath, ["scripts/verify-release-tag.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, GITHUB_REF_NAME: tag }
+    });
+
+  const matching = runGuard(`v${packageJson.version}`);
+  assert.equal(matching.status, 0, matching.stderr);
+  assert.match(matching.stdout, /release tag verified/);
+
+  const mismatching = runGuard(`v${packageJson.version}-wrong`);
+  assert.notEqual(mismatching.status, 0);
+  assert.match(mismatching.stderr, /release tag mismatch/);
 });
 
 test("CI and release dry runs exercise a disposable tarball install", async () => {
