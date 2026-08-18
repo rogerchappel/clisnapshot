@@ -15,19 +15,43 @@ dedicated process group a short `SIGTERM` grace period before escalating to
 
 ## Install
 
+The package has not been published to npm yet. Until
+`npm view clisnapshot version` succeeds, build a tarball from a clean checkout:
+
+```sh
+git clone https://github.com/rogerchappel/clisnapshot.git
+cd clisnapshot
+npm ci
+npm run build
+mkdir -p /tmp/clisnapshot-package
+npm pack --pack-destination /tmp/clisnapshot-package
+```
+
+Then install that tarball in the project where you want to use it (replace the
+example with the absolute path printed by `npm pack`):
+
+```sh
+npm install --save-dev /absolute/path/to/clisnapshot-0.1.0.tgz
+```
+
+Once `npm view clisnapshot version` succeeds, install from the registry instead:
+
 ```sh
 npm install --save-dev clisnapshot
 ```
 
-Or try the repo locally:
+## Quick start
+
+After installing the local tarball, run the checked-in executable without
+allowing `npx` to download a different package:
 
 ```sh
-npm install
-npm run build
-node dist/cli.js --help
+npx --no-install clisnapshot init
+npx --no-install clisnapshot run --update
+npx --no-install clisnapshot run
 ```
 
-## Quick start
+Once the package is published, the normal registry-backed commands are:
 
 ```sh
 npx clisnapshot init
@@ -168,12 +192,13 @@ npm run release:check
 
 ## Release and installation contract
 
-The supported end-user distribution is the public `clisnapshot` package on
-npm. A `vMAJOR.MINOR.PATCH` tag runs the release workflow, which builds one
-tarball, installs that exact tarball into a disposable project, runs its
-`clisnapshot --help` executable, and then publishes the verified artifact to
-npm with trusted-publishing provenance. The same disposable-install smoke test
-runs in CI and in the release dry run.
+The intended end-user distribution is the public `clisnapshot` package on npm
+once `npm view clisnapshot version` succeeds. Until then, use the local tarball
+installation above. A `vMAJOR.MINOR.PATCH` tag runs the release workflow, which
+builds one tarball, installs that exact tarball into a disposable project, runs
+its `clisnapshot --help` executable, and then publishes the verified artifact
+to npm with trusted-publishing provenance. The same disposable-install smoke
+test runs in CI and in the release dry run.
 
 Maintainers must configure the npm package's trusted publisher for this GitHub
 repository and `.github/workflows/release.yml`; the workflow intentionally has
