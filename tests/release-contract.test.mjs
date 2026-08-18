@@ -50,6 +50,30 @@ test("documented npm installation is backed by the release workflow", async () =
   );
 });
 
+test("README does not claim registry availability before the first publication", async () => {
+  const readme = await fs.readFile("README.md", "utf8");
+
+  assert.match(
+    readme,
+    /Until\s+`npm view clisnapshot version` succeeds/,
+    "pre-publication guidance must name the registry check"
+  );
+  assert.match(readme, /npm pack --pack-destination/);
+  assert.match(readme, /npm install --save-dev \/absolute\/path\/to\/clisnapshot-0\.1\.0\.tgz/);
+  assert.match(
+    readme,
+    /Once `npm view clisnapshot version` succeeds[\s\S]*npm install --save-dev clisnapshot/
+  );
+  assert.match(
+    readme,
+    /Once the package is published[\s\S]*npx clisnapshot init[\s\S]*npx clisnapshot run --update[\s\S]*npx clisnapshot run/
+  );
+  assert.doesNotMatch(
+    readme,
+    /The supported end-user distribution is the public `clisnapshot` package on\s+npm\./
+  );
+});
+
 test("release workflow verifies the tag before packing or publishing", async () => {
   const { workflow } = await readReleaseWorkflow();
   const steps = workflow.jobs.release.steps;
