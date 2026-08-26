@@ -15,6 +15,10 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) an
 - Verified npm tarball installation and provenance-backed publishing from the
   tag release workflow.
 
+### Changed
+
+- CI now runs the test suite on Node.js 20 and 22, matching the declared `engines.node` range.
+
 ## Release Links
 
 - Unreleased: `https://github.com/rogerchappel/clisnapshot/compare/v0.1.0...HEAD`
