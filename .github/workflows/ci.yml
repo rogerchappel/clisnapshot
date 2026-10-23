@@ -34,3 +34,5 @@ jobs:
         run: npm run smoke
       - name: npm run package:smoke
         run: npm run package:smoke
+      - name: Validate repository requirements and local checks
+        run: bash scripts/validate.sh
