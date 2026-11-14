@@ -55,14 +55,15 @@ test("README does not claim registry availability before the first publication",
 
   assert.match(
     readme,
-    /Until\s+`npm view clisnapshot version` succeeds/,
-    "pre-publication guidance must name the registry check"
+    /npm view clisnapshot version --registry=https:\/\/registry\.npmjs\.org\//,
+    "installation guidance must provide a reproducible public registry check"
   );
+  assert.match(readme, /do not treat a network failure as proof that it is/);
   assert.match(readme, /npm pack --pack-destination/);
   assert.match(readme, /npm install --save-dev \/absolute\/path\/to\/clisnapshot-0\.1\.0\.tgz/);
   assert.match(
     readme,
-    /Once `npm view clisnapshot version` succeeds[\s\S]*npm install --save-dev clisnapshot/
+    /When the check succeeds, install the published package with\s+`npm install --save-dev clisnapshot`/
   );
   assert.match(
     readme,
