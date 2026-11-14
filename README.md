@@ -15,8 +15,18 @@ dedicated process group a short `SIGTERM` grace period before escalating to
 
 ## Install
 
-The package has not been published to npm yet. Until
-`npm view clisnapshot version` succeeds, build a tarball from a clean checkout:
+Check the public npm registry before choosing an installation method:
+
+```sh
+npm view clisnapshot version --registry=https://registry.npmjs.org/
+```
+
+A successful command prints the published version. A nonzero exit means the
+package is not currently available from the public registry (or the registry
+could not be reached); do not treat a network failure as proof that it is
+unpublished. When the check succeeds, install the published package with
+`npm install --save-dev clisnapshot`. When the package is not found, build and
+install a local tarball from a clean checkout instead:
 
 ```sh
 git clone https://github.com/rogerchappel/clisnapshot.git
@@ -34,11 +44,8 @@ example with the absolute path printed by `npm pack`):
 npm install --save-dev /absolute/path/to/clisnapshot-0.1.0.tgz
 ```
 
-Once `npm view clisnapshot version` succeeds, install from the registry instead:
-
-```sh
-npm install --save-dev clisnapshot
-```
+The registry installation command above applies only after the availability
+check succeeds.
 
 ## Quick start
 
