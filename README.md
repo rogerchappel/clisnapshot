@@ -186,7 +186,7 @@ Small, atomic PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY
 
 ## Development
 
-Use Node.js 20 or newer. Run the same checks locally before opening a PR:
+The supported Node.js majors are 20, 22, and 24 (the active even-numbered LTS lines). The package engine range (`>=20 <25`) enforces the supported major range. CI validates each supported major. Run the same checks locally before opening a PR:
 
 ```sh
 npm run build
