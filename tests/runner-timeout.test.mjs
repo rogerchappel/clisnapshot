@@ -35,3 +35,18 @@ test("a timeout cleans up stubborn descendants before rejecting", async () => {
   await new Promise(resolve => setTimeout(resolve, 700));
   await assert.rejects(fs.access(marker), error => error?.code === "ENOENT");
 });
+
+test("a spawn error after timeout cleanup starts settles without hanging", async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "clisnapshot-timeout-error-"));
+  const result = executeCase("timeout-spawn-error", {
+    command: process.execPath,
+    args: ["-e", "setTimeout(() => {}, 2000)"],
+    timeoutMs: 20
+  }, dir);
+
+  const outcome = await Promise.race([
+    result.then(() => "resolved", error => error?.code),
+    new Promise(resolve => setTimeout(() => resolve("hung"), 1000))
+  ]);
+  assert.notEqual(outcome, "hung");
+});

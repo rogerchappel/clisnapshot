@@ -67,7 +67,7 @@ export async function executeCase(name: string, testCase: CliSnapshotCase, root:
     child.stderr?.on("data", chunk => { stderr += chunk; });
     child.on("error", error => {
       clearTimeout(timer);
-      if (!settled && !timedOut) {
+      if (!settled) {
         settled = true;
         reject(new CliSnapshotError(`Could not start case '${name}': ${error.message}`, "CASE_SPAWN_FAILED"));
       }
